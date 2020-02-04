@@ -1,3 +1,3 @@
 # pdf-table-parser
 
-brew install poppler
+`brew install poppler`
