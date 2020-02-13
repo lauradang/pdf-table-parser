@@ -8,7 +8,16 @@ import os
 
 # args = vars(ap.parse_args())
 
-def crop(img_path, make_temp):
+def crop(
+    img_path, 
+    make_temp, 
+    dilation=10, 
+    erosion=5,
+    min_height=200,
+    min_width=0,
+    max_height=9999,
+    max_width=2000
+):
     img = cv2.imread(img_path)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -17,8 +26,8 @@ def crop(img_path, make_temp):
     thresh = cv2.adaptiveThreshold(gray, 255, 1, 1, 11, 2)
     thresh_color = cv2.cvtColor(thresh,cv2.COLOR_GRAY2BGR)
 
-    thresh = cv2.dilate(thresh, None, iterations=10)
-    thresh = cv2.erode(thresh, None, iterations=5)
+    thresh = cv2.dilate(thresh, None, iterations=dilation)
+    thresh = cv2.erode(thresh, None, iterations=erosion)
 
     contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
@@ -29,10 +38,16 @@ def crop(img_path, make_temp):
     for i, cnt in enumerate(contours):
         x,y,w,h = cv2.boundingRect(cnt)
         
-        if h < 200:
+        if h < min_height:
             continue
 
-        if w > 2000:
+        if h > max_height:
+            continue
+
+        if w < min_width:
+            continue
+        
+        if w > max_width:
             continue
         
         x_top_left_corner = x
@@ -68,4 +83,8 @@ def crop(img_path, make_temp):
             print("{}: {}, {}".format(temp_file, x_top_left_corner, y_top_left_corner))
             cv2.imwrite(temp_file, crop_img) 
 
-    cv2.imwrite('visualize.jpg',img)
+    dir = os.path.join("visualize")
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
+    cv2.imwrite(f'visualize{img_path}.jpg', img)

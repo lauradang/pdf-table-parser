@@ -2,6 +2,7 @@ from pdf_to_jpg import pdf_to_jpg
 from crop import crop
 from move_img import move_images
 from format_df import create_dataframe
+from gui import ImageFrame
 import os
 import sys
 import shutil
@@ -10,13 +11,13 @@ import shutil
 pdf_to_jpg(sys.argv[1])
 
 # Get all jpgs that were just converted
-files = [file for file in os.listdir() if "out_" in file]
+files = [file for file in os.listdir("jpg") if ".jpg" in file]
 
 dataframes = []
 
 for file in files:
-    make_temp = True
-    crop(file, make_temp) # Crop all jpgs into rectangles
+    crop(f"jpg/{file}", True) # Crop all jpgs into rectangles
+
     move_images() # Move images into respective folders
     dataframes.append(create_dataframe()) # Create final pandas dataframe
 
