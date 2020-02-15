@@ -1,6 +1,5 @@
-import cv2
 import os
-
+import cv2
 # ap = argparse.ArgumentParser()
 
 # ap.add_argument("-i", "--image", required=True,
@@ -79,12 +78,10 @@ def crop(
             temp_file = "cropped_images/{}.jpg".format(
                 str(rectangle).replace("[", "").replace("]", "").replace(", ", "_")
             )
+        
+            print(f"{temp_file}: {x_top_left_corner}, {y_top_left_corner}")
+            cv2.imwrite(temp_file, crop_img)             
 
-            print("{}: {}, {}".format(temp_file, x_top_left_corner, y_top_left_corner))
-            cv2.imwrite(temp_file, crop_img) 
+    return img
 
-    dir = os.path.join("visualize")
-    if not os.path.exists(dir):
-        os.mkdir(dir)
-
-    cv2.imwrite(f'visualize{img_path}.jpg', img)
+# crop("jpg/out_0.jpg", True)
