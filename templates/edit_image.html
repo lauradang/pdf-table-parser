@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<body>
+    <h2>HTML Image</h2>
+    {% for image in visualize %}
+        <img src="{{ image }}" width="500" height="333">
+    {% endfor %}
+</body>
+
+<tbody>
+    {% for key, segment in segment_details.items() %}
+      <tr>
+        <td>{{ key }}</td>
+        <td>{{ segment }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  

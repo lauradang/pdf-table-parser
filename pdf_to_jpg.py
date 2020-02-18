@@ -13,7 +13,7 @@ def pdf_to_jpg(pdf):
         os.mkdir(dir)
 
     for i, page in enumerate(pages):
-        page.save(f"jpg/out_{i}.jpg", "JPEG")
+        page.save("jpg/out_{}.jpg".format(i), "JPEG")
 
 def resize_image(img, output):
     #percent by which the image is resized

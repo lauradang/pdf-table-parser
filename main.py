@@ -16,10 +16,10 @@ files = [file for file in os.listdir("jpg") if ".jpg" in file]
 dir = os.path.join("visualize")
 if not os.path.exists(dir):
     os.mkdir(dir)
-    
+
 for file in files:
     img = crop(f"jpg/{file}", False) # Crop all jpgs into rectangles
-    cv2.imwrite(f"visualize/{file}", resize_image(img, file))
+    cv2.imwrite(f"visualizse/{file}", resize_image(img, file))
 
 for file in [file for file in os.listdir("visualize") if ".jpg" in file]:
     while True:
@@ -39,5 +39,3 @@ for file in files:
         shutil.rmtree(dir)
 
 print(dataframes)
-
-

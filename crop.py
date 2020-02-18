@@ -79,7 +79,6 @@ def crop(
                 str(rectangle).replace("[", "").replace("]", "").replace(", ", "_")
             )
         
-            print(f"{temp_file}: {x_top_left_corner}, {y_top_left_corner}")
             cv2.imwrite(temp_file, crop_img)             
 
     return img

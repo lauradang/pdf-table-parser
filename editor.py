@@ -4,6 +4,7 @@ import numpy as np
 import PIL.Image
 import PIL.ImageTk
 import argparse
+from crop import crop
 
 class Editor(Tk):
 	def __init__(self, file):
@@ -40,6 +41,10 @@ class Editor(Tk):
 		self.zoomText			= Label(self.zoomLabel,		text="Zoom:"	).pack(fill=BOTH, side="left")
 		self.buttonZoomIn		= Button(self.zoomLabel,	text="In ",	highlightbackground="black",		command=lambda: self.zoom("IN")			).pack(fill=BOTH, side="left")
 		self.buttonZoomOut		= Button(self.zoomLabel, 		text="Out", highlightbackground="black",				command=lambda: self.zoom("OUT")		).pack(fill=BOTH, side="right")
+		self.dilationText			= Label(self.dilationLabel,		text="Dilation:"	).pack(fill=BOTH, side="left")
+		self.dilationUp		= Button(self.dilationLabel,	text="In ",	highlightbackground="black",		command=lambda: self.dilation("UP")			).pack(fill=BOTH, side="left")
+		self.dilationDown		= Button(self.dilationLabel,	text="In ",	highlightbackground="black",		command=lambda: self.dilation("DOWN")			).pack(fill=BOTH, side="right")
+		
 		self.rotateLabel		= Label(self.butFrame)
 		self.rotateLabel.pack()
 		self.rotateText			= Label(self.rotateLabel,  		text="Rotate:"													).pack(fill=BOTH, side="left")
@@ -50,35 +55,8 @@ class Editor(Tk):
 		self.buttonSave			= Button(self.butFrame,  		text="Save image", highlightbackground="black",		command=self.saveImage					).pack(fill=BOTH)
 		self.buttonQuit			= Button(self.butFrame, text="Quit",highlightbackground="black",  	command=self.quit						).pack(fill=BOTH)
 		
-	def updateLabel(self, img):
-		tempImg = cv2.cvtColor(img, cv2.COLOR_BGR2RGBA)
-		tempImg = PIL.Image.fromarray(tempImg)
-		tempImg = PIL.ImageTk.PhotoImage(image=tempImg)
-
-		self.imageLabel.configure(image=tempImg)
-		self.imageLabel.image = tempImg
-
-	def openImage(self, filename=None):
-		if filename is None:	# if the filename was not passed as a parameter
-			try:
-				filename = filedialog.askopenfilename(initialdir="~/Pictures",title="Open image") #, filetypes=(("image files", "*.jpg"),("all files", "*.*")))
-			except(OSError, FileNotFoundError):
-				messagebox.showerror("Error","Unable to find or open file <filename>")
-			except Exception as error:
-				messagebox.showerror("Error","An error occurred: <error>")
-
-		if filename:	# if filename is not an empty string
-			self.image = cv2.imread(filename)	
-			self.updateLabel(self.image)
-
-	def saveImage(self):
-		try:
-			filename = filedialog.asksaveasfilename(initialdir="~/Pictures",title="Save image")
-		except Exception as error:
-			messagebox.showerror("Error","An error occurred: <error>")
-
-		if filename:
-			cv2.imwrite(filename, self.image)
+	def dilation(self):
+		self.image = crop()
 
 	def flip(self, option):
 		h, w, _ = self.image.shape
@@ -134,3 +112,33 @@ class Editor(Tk):
 
 		self.image = temp
 		self.updateLabel(self.image)
+
+	def updateLabel(self, img):
+		tempImg = cv2.cvtColor(img, cv2.COLOR_BGR2RGBA)
+		tempImg = PIL.Image.fromarray(tempImg)
+		tempImg = PIL.ImageTk.PhotoImage(image=tempImg)
+
+		self.imageLabel.configure(image=tempImg)
+		self.imageLabel.image = tempImg
+
+	def openImage(self, filename=None):
+		if filename is None:	# if the filename was not passed as a parameter
+			try:
+				filename = filedialog.askopenfilename(initialdir="~/Pictures",title="Open image") #, filetypes=(("image files", "*.jpg"),("all files", "*.*")))
+			except(OSError, FileNotFoundError):
+				messagebox.showerror("Error","Unable to find or open file <filename>")
+			except Exception as error:
+				messagebox.showerror("Error","An error occurred: <error>")
+
+		if filename:	# if filename is not an empty string
+			self.image = cv2.imread(filename)	
+			self.updateLabel(self.image)
+
+	def saveImage(self):
+		try:
+			filename = filedialog.asksaveasfilename(initialdir="~/Pictures",title="Save image")
+		except Exception as error:
+			messagebox.showerror("Error","An error occurred: <error>")
+
+		if filename:
+			cv2.imwrite(filename, self.image)

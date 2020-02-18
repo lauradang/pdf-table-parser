@@ -82,3 +82,7 @@ pydoc () {
 if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ] ; then
     hash -r 2>/dev/null
 fi
+
+FLASK_ENV=development
+FLASK_APP=app.py
+
