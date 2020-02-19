@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<body>
+<head>
+  <meta http-equiv="cache-control" content="no-cache" />
+</head>
+
+  <body>
     <h2>HTML Image</h2>
     {% for image in visualize %}
-        <img src="{{ image }}" width="500" height="333">
+        <img src="{{ image }}" height="533">
+        <form action="{{ url_for('edit_image') }}"  method="POST">
+          <label for="dilation">Dilation:</label>
+          <input type="text" id="dilation" name="dilation"><br><br>
+
+          <label for="erosion">Erosion:</label>
+          <input type="text" id="erosion" name="erosion"><br><br>
+
+          <label for="min_width">Min Width:</label>
+          <input type="text" id="min_width" name="min_width"><br><br>
+
+          <label for="min_height">Min Height:</label>
+          <input type="text" id="min_height" name="min_height"><br><br>
+
+          <label for="max_width">Max Width:</label>
+          <input type="text" id="max_width" name="max_width"><br><br>
+
+          <label for="max_height">Max Height:</label>
+          <input type="text" id="max_height" name="max_height"><br><br>
+
+          <input type=”hidden” id="image" name="image" value="{{ image }}">
+          <input type="submit" name="post_me" value="Submit">
+        </form>
     {% endfor %}
 </body>
-
-<tbody>
-    {% for key, segment in segment_details.items() %}
-      <tr>
-        <td>{{ key }}</td>
-        <td>{{ segment }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-  
